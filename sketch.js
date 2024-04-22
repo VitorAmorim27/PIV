@@ -17,21 +17,21 @@ var niveis = {
     holeY: 100,
     ballX: 100,
     ballY: 450,
-    strokeDistance: 10,
+    strokeDistance: 12,
   },
   'Nivel 2': {
     holeX: 600,
     holeY: 200,
     ballX: 200,
     ballY: 400,
-    strokeDistance: 7,
+    strokeDistance: 12,
   },
   'Nivel 3': {
     holeX: 500,
     holeY: 300,
     ballX: 300,
     ballY: 350,
-    strokeDistance: 5,
+    strokeDistance: 12,
   },
 };
 var nivelAtual;
@@ -139,16 +139,16 @@ if (nivelTexto === 'Nivel 1' && collidePointEllipse(x, y, 350, 350, 180, 80)) {
 
 
   // Se a bola de golfe cair no buraco
-  if (abs(x - holeX) <= 5 && abs(y - holeY) <= 5) {
+  if (abs(x - holeX) <= 9 && abs(y - holeY) <= 9) {
       xSpeed = 0;
       ySpeed = 0;
-      fill(0, 0, 255);
+      fill(255, 255, 255);
       textSize(32);
-      text('YOU WIN!', 10, 30);
+      text('Parabéns!', 310, 220);
       if (strokes == 1) {
           text('Hole in One!', 10, 70);
       } else {
-          text(strokes + ' strokes!', 10, 70);
+          text('Completaste o nível em ' + strokes + ' jogadas!', 170, 270);
       }
   } else if (counter > 10 * strokeDistance) {
       // Para a bola e reseta o counter
