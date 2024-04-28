@@ -9,8 +9,14 @@ var treeImage;
 var counter;
 var strokeDistance;
 var radioSticks;
+var radioNivel;
 var nivelTexto = 'Nivel 1';
 var jogoIniciado = false;
+var button; // Adicionado para que o botão seja uma variável global
+var tacoSelecionado = false; // Variável para controlar se um taco foi selecionado
+var instrucoesButton; // Variável para o botão das instruções
+var voltarButton; // Variável para o botão de voltar ao menu inicial
+var menuInicialTexto; // Variável para o texto "Menu Inicial"
 
 var niveis = {
   'Nivel 1': {
@@ -37,6 +43,12 @@ var niveis = {
 };
 var nivelAtual;
 
+var instrucoes = "Instruções do Jogo:\n\n" +
+                 "1. Selecione um Nível.\n" +
+                 "2. Clique em Iniciar Jogo e em seguida selecione um taco.\n" +
+                 "3. Clique na bola de golfe para ajustar a força e direção do taco.\n" +
+                 "4. Tente acertar a bola no buraco com o menor número de jogadas possíveis para vencer.\n" +
+                 "5. Aproveite o jogo!";
 
 function setup() {
   // Cria o canvas
@@ -62,25 +74,36 @@ function criarMenuInicial() {
   background(0, 220, 0);
 
   // Texto do título
-  fill(255);
-  textSize(32);
-  textAlign(CENTER, CENTER);
-  text("Menu Inicial", width / 2, height / 2 - 50);
+  menuInicialTexto = createP("Menu Inicial");
+  menuInicialTexto.position(width / 2 - 50, height / 2 - 100);
+  menuInicialTexto.style('font-size', '32px');
+  menuInicialTexto.style('color', 'white');
 
   // Botão para iniciar o jogo
   button = createButton('Iniciar Jogo');
   button.position(width / 2 - 50, height / 2);
   button.size(100, 50);
   button.mousePressed(iniciarJogo);
+
+  // Botão para ver as instruções
+  instrucoesButton = createButton('Instruções');
+  instrucoesButton.position(width / 2 - 50, height / 2 + 70);
+  instrucoesButton.size(100, 50);
+  instrucoesButton.mousePressed(verInstrucoes);
 }
 
 // Função para iniciar o jogo
 function iniciarJogo() {
   jogoIniciado = true;
 
+  // Remover todos os elementos do menu inicial quando o jogo é iniciado
+  button.remove();
+  instrucoesButton.remove();
+  menuInicialTexto.remove();
+
   // Cria o grupo de botões de opção para selecionar os níveis
   radioNivel = createRadio();
-  radioNivel.position(15, height - 75); // Posição no canto inferior esquerdo
+  radioNivel.position(15, height - 75); 
 
   // Adiciona opções para cada nível
   radioNivel.option('Nivel 1');
@@ -90,14 +113,47 @@ function iniciarJogo() {
   // Função chamada quando o nível é alterado
   radioNivel.changed(changeNivel);
 
-  // Inicializa o jogo com o nível padrão (por exemplo, 'Nivel 1')
-  nivelAtual = niveis['Nivel 1'];
-  initializeGame(nivelAtual);
+  // Cria o grupo de botões de opção para selecionar os tacos
+  radioSticks = createRadio();
+  radioSticks.position(15, height - 45); // Posição no canto inferior esquerdo
+
+  // Adiciona opções para cada taco
+  radioSticks.option('Taco 1');
+  radioSticks.option('Taco 2');
+  radioSticks.option('Taco 3');
+
+  radioSticks.changed(changeStick);
+
+  // Inicializa o jogo com o nível 1
+  changeNivel();
 }
 
-// Função para desenhar o menu inicial
-function desenharMenuInicial() {
-  // Não é necessário desenhar nada no draw(), pois o menu inicial já foi desenhado no setup()
+// Função para ver as instruções
+function verInstrucoes() {
+  // Remover todos os elementos do menu inicial
+  button.remove();
+  instrucoesButton.remove();
+  menuInicialTexto.remove();
+  // Adicionar texto de instruções
+  textAlign(LEFT);
+  fill(255);
+  textSize(16);
+  text(instrucoes, 20, 20, width - 40, height - 40);
+  // Botão para voltar ao menu inicial
+  voltarButton = createButton('Voltar ao Menu Inicial');
+  voltarButton.position(width / 2 - 50, height - 70);
+  voltarButton.size(200, 50);
+  voltarButton.mousePressed(voltarMenuInicial);
+}
+
+// Função para voltar ao menu inicial
+function voltarMenuInicial() {
+  jogoIniciado = false;
+
+  // Remover todos os elementos de instruções
+  voltarButton.remove();
+  // Criar elementos do menu inicial novamente
+  criarMenuInicial();
 }
 
 // Função para inicializar o jogo com base nas configurações do nível escolhido
@@ -113,17 +169,6 @@ function initializeGame(nivel) {
   counter = 0;
   strokeDistance = nivel.strokeDistance;
   strokes = 0;
-
-  // Cria o grupo de botões de opção para selecionar os tacos
-  radioSticks = createRadio();
-  radioSticks.position(15, height - 45); // Posição no canto inferior esquerdo
-
-  // Adiciona opções para cada taco
-  radioSticks.option('Taco 1');
-  radioSticks.option('Taco 2');
-  radioSticks.option('Taco 3');
-
-  radioSticks.changed(changeStick);
 }
 
 // Função chamada quando o nível é alterado
@@ -135,35 +180,38 @@ function changeNivel() {
   initializeGame(nivelAtual);
 }
 
+// Função para desenhar o menu inicial
+function desenharMenuInicial() {
+}
+
 // Função para desenhar o jogo
 function desenharJogo() {
   // Define o plano de fundo como verde
   background(0, 220, 0);
 
   // Desenha um retângulo ao redor do canvas
-  stroke(0, 0, 0); // Cor da linha preta
-  strokeWeight(20); // Espessura da linha
-  noFill(); // Não preenche o retângulo
-  rect(0, 0, width, height); // Retângulo ao redor do canvas
+  stroke(0, 0, 0);
+  strokeWeight(20); 
+  noFill(); 
+  rect(0, 0, width, height); 
 
   // Mantém o buraco em sua posição atual
   fill(0, 0, 0);
   ellipse(holeX, holeY, 30);
 
   // Desenha a bola de golfe
-  stroke(0, 0, 0); // Cor da linha preta
-  strokeWeight(2); // Espessura da linha para a bola
-  fill(255); // Cor branca para a bola de golfe
+  stroke(0, 0, 0); 
+  strokeWeight(2); 
+  fill(255); 
   ellipse(x, y, 20);
 
   // Verifica se o nível atual é o nível 1 e se a bola colidiu com o lago
   if (nivelTexto === 'Nivel 1' && collidePointEllipse(x, y, 350, 350, 180, 80)) {
-    // Se a bola colidir com o lago, calcule a direção da bola em relação ao centro do lago
-    var dx = x - 350; // Diferença na posição x entre a bola e o centro do lago
-    var dy = y - 350; // Diferença na posição y entre a bola e o centro do lago
-    var distance = dist(x, y, 350, 350); // Distância entre a bola e o centro do lago
 
-    // Calcule os novos valores de x e y para posicionar a bola a 40 unidades do centro do lago
+    var dx = x - 350; 
+    var dy = y - 350; 
+    var distance = dist(x, y, 350, 350); 
+
     x = 350 + (dx / distance) * (180 / 2 + 40);
     y = 350 + (dy / distance) * (80 / 2 + 40);
 
@@ -196,7 +244,7 @@ function desenharJogo() {
     // Para a bola e ajusta a posição se necessário
     xSpeed = 0;
     ySpeed = 0;
-    // Verifica os limites
+
     if (x >= width - 30) {
       x -= 1;
     }
@@ -210,7 +258,7 @@ function desenharJogo() {
       y += 1;
     }
   } else {
-    // Atualiza a posição da bola de golfe
+
     if (strokeDistance > 0) {
       counter++;
     }
@@ -239,31 +287,45 @@ function desenharJogo() {
 
   if (xSpeed === 0 && ySpeed === 0) {
     // Desenha um círculo ao redor da bola para indicar a área de clique
-    stroke(255, 0, 0); // Cor vermelha para o círculo
-    strokeWeight(2); // Espessura da linha
-    noFill(); // Não preencher o círculo
-    ellipse(x, y, 75); // Desenha um círculo com raio de 75 ao redor da bola
+    stroke(255, 0, 0);
+    strokeWeight(2);
+    noFill();
+    ellipse(x, y, 75);
+  }
+
+  // Verifica se um taco foi selecionado e se a mensagem de seleção de taco deve ser exibida
+  if (tacoSelecionado) {
+    // Verifica se há um taco selecionado
+    var selectedStick = radioSticks.value();
+    if (!selectedStick) {
+      // Se não houver taco selecionado, exibe um alerta
+      fill(255, 0, 0); // Cor vermelha
+      textSize(16);
+      textAlign(CENTER, CENTER);
+      text('Por favor, selecione um taco primeiro.', width / 2, height - 10);
+    }
   }
 }
 
 var tacoVelocities = {
-  'Taco 1': 0.5, // Velocidade associada ao Taco 1
-  'Taco 2': 0.8, // Velocidade associada ao Taco 2
-  'Taco 3': 1.2 // Velocidade associada ao Taco 3
+  'Taco 1': 0.5,
+  'Taco 2': 0.8, 
+  'Taco 3': 1.2
 };
 
 // Função a ser chamada quando o taco mudar
 function changeStick() {
   var selectedStick = radioSticks.value();
-  // Aqui definimos ações com base na seleção do taco
+
   console.log('Taco selecionado:', selectedStick);
 
-  // Obtemos a velocidade associada ao taco selecionado
   var speedMultiplier = tacoVelocities[selectedStick];
 
-  // Atualizamos as velocidades com base na seleção do taco
   xSpeed *= speedMultiplier;
   ySpeed *= speedMultiplier;
+
+  // Define que um taco foi selecionado
+  tacoSelecionado = true;
 }
 
 function mousePressed() {
@@ -275,16 +337,18 @@ function mousePressed() {
 
   if (mouseX >= radioX && mouseX <= radioX + radioWidth &&
     mouseY >= radioY && mouseY <= radioY + radioHeight) {
-    // Se o clique ocorreu na área dos botões de opção, não faz nada
+
     return;
   }
 
-  // Verifica se há um taco selecionado
-  var selectedStick = radioSticks.value();
-  if (!selectedStick) {
-    // Se não houver taco selecionado, exibe um alerta
-    alert('Por favor, selecione um taco primeiro.');
-    return;
+  // Verifica se há um taco selecionado apenas se o jogo estiver iniciado
+  if (jogoIniciado) {
+    var selectedStick = radioSticks.value();
+    if (!selectedStick) {
+      // Se não houver taco selecionado, exibe um alerta
+      alert('Por favor, selecione um taco primeiro.');
+      return;
+    }
   }
 
   // Verifica se o clique do mouse está próximo à bola de golfe
