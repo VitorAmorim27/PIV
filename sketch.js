@@ -17,6 +17,7 @@ var tacoSelecionado = false; // Variável para controlar se um taco foi selecion
 var instrucoesButton; // Variável para o botão das instruções
 var voltarButton; // Variável para o botão de voltar ao menu inicial
 var menuInicialTexto; // Variável para o texto "Menu Inicial"
+var LvlTexto; // Variável para o texto "Menu Inicial"
 
 var niveis = {
   'Nivel 1': {
@@ -74,8 +75,8 @@ function criarMenuInicial() {
   background(0, 220, 0);
 
   // Texto do título
-  menuInicialTexto = createP("Menu Inicial");
-  menuInicialTexto.position(width / 2 - 50, height / 2 - 100);
+  menuInicialTexto = createP("Golfe do Vitinha");
+  menuInicialTexto.position(width / 2 - 80, height / 2 - 100);
   menuInicialTexto.style('font-size', '32px');
   menuInicialTexto.style('color', 'white');
 
@@ -94,38 +95,34 @@ function criarMenuInicial() {
 
 // Função para iniciar o jogo
 function iniciarJogo() {
-  jogoIniciado = true;
 
   // Remover todos os elementos do menu inicial quando o jogo é iniciado
   button.remove();
   instrucoesButton.remove();
   menuInicialTexto.remove();
 
+    // Texto do título
+    LvlTexto = createP("Selecione o nível");
+    LvlTexto.position(width / 2 - 80, height / 2 - 100);
+    LvlTexto.style('font-size', '32px');
+    LvlTexto.style('color', 'white');
+  
   // Cria o grupo de botões de opção para selecionar os níveis
   radioNivel = createRadio();
-  radioNivel.position(15, height - 75); 
+  radioNivel.position(width / 2 - 150 , height / 2 ); 
 
   // Adiciona opções para cada nível
   radioNivel.option('Nivel 1');
   radioNivel.option('Nivel 2');
   radioNivel.option('Nivel 3');
 
+  radioNivel.style('font-size', '24px');
+  radioNivel.style('width', '500px');
+  radioNivel.style('height', '100px');
   // Função chamada quando o nível é alterado
   radioNivel.changed(changeNivel);
 
-  // Cria o grupo de botões de opção para selecionar os tacos
-  radioSticks = createRadio();
-  radioSticks.position(15, height - 45); // Posição no canto inferior esquerdo
-
-  // Adiciona opções para cada taco
-  radioSticks.option('Taco 1');
-  radioSticks.option('Taco 2');
-  radioSticks.option('Taco 3');
-
-  radioSticks.changed(changeStick);
-
-  // Inicializa o jogo com o nível 1
-  changeNivel();
+  
 }
 
 // Função para ver as instruções
@@ -158,10 +155,19 @@ function voltarMenuInicial() {
 
 // Função para inicializar o jogo com base nas configurações do nível escolhido
 function initializeGame(nivel) {
+  jogoIniciado = true;
   holeX = nivel.holeX;
   holeY = nivel.holeY;
   x = nivel.ballX;
   y = nivel.ballY;
+
+  if (radioNivel) {
+    radioNivel.style('display', 'none');
+}
+
+  if (LvlTexto) {
+      LvlTexto.remove();
+  }
 
   // Inicializa outros parâmetros de jogo
   xSpeed = 0;
@@ -169,7 +175,18 @@ function initializeGame(nivel) {
   counter = 0;
   strokeDistance = nivel.strokeDistance;
   strokes = 0;
+
+  radioSticks = createRadio();
+  radioSticks.position(15, height - 45); // Posição no canto inferior esquerdo
+
+  // Adiciona opções para cada taco
+  radioSticks.option('Taco 1');
+  radioSticks.option('Taco 2');
+  radioSticks.option('Taco 3');
+
+  radioSticks.changed(changeStick);
 }
+
 
 // Função chamada quando o nível é alterado
 function changeNivel() {
@@ -178,6 +195,7 @@ function changeNivel() {
   nivelTexto = selectedNivel;
   // Inicializa o jogo com o nível escolhido
   initializeGame(nivelAtual);
+  
 }
 
 // Função para desenhar o menu inicial
