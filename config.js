@@ -33,14 +33,14 @@ var niveis = {
         holeY: 200,
         ballX: 200,
         ballY: 400,
-        strokeDistance: 7,
+        strokeDistance: 10,
     },
     'Nivel 3': {
         holeX: 500,
         holeY: 300,
         ballX: 300,
         ballY: 350,
-        strokeDistance: 5,
+        strokeDistance: 10,
     }
 };
 

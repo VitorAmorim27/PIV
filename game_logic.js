@@ -7,13 +7,13 @@ function iniciarJogo() {
   
       // Texto do título
       LvlTexto = createP("Selecione o nível");
-      LvlTexto.position(width / 2 - 80, height / 2 - 100);
+      LvlTexto.position(width / 2 - 120, height / 2 - 270);
       LvlTexto.style('font-size', '32px');
-      LvlTexto.style('color', 'white');
+      LvlTexto.style('color', 'black');
     
     // Cria o grupo de botões de opção para selecionar os níveis
     radioNivel = createRadio();
-    radioNivel.position(width / 2 - 150 , height / 2 ); 
+    radioNivel.position(width / 2 - 150 , height / 2 - 150); 
   
     // Adiciona opções para cada nível
     radioNivel.option('Nivel 1');
@@ -47,14 +47,6 @@ function iniciarJogo() {
   }
   
   // Função para voltar ao menu inicial
-  function voltarMenuInicial() {
-    jogoIniciado = false;
-  
-    // Remover todos os elementos de instruções
-    voltarButton.remove();
-    // Criar elementos do menu inicial novamente
-    criarMenuInicial();
-  }
   function voltarMenuInicial() {
     jogoIniciado = false;
   
@@ -104,6 +96,12 @@ function iniciarJogo() {
     initializeGame(nivelAtual);
     
   }
+  var tacoVelocities = {
+    'Taco 1': 0.5,
+    'Taco 2': 0.8, 
+    'Taco 3': 1.2
+  };
+
   function changeStick() {
     var selectedStick = radioSticks.value();
   
@@ -117,6 +115,8 @@ function iniciarJogo() {
     // Define que um taco foi selecionado
     tacoSelecionado = true;
   }
+
+
   function mousePressed() {
     // Verifica se o clique ocorreu na área dos botões de opção
     var radioX = radioSticks.elt.offsetLeft;

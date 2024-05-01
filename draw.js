@@ -2,15 +2,9 @@ function draw() {
     if (jogoIniciado) {
         // Se o jogo já foi iniciado, desenhe o jogo
         desenharJogo();
-    } else {
-        // Se o jogo ainda não foi iniciado, desenhe o menu inicial
-        desenharMenuInicial();
-    }
+    } 
 }
 
-function desenharMenuInicial() {
-    // Função para desenhar o menu inicial
-}
 
 function desenharJogo() {
     // Define o plano de fundo como verde
@@ -52,16 +46,17 @@ function desenharJogo() {
   
     // Se a bola de golfe cair no buraco
     if (abs(x - holeX) <= 5 && abs(y - holeY) <= 5) {
-      xSpeed = 0;
-      ySpeed = 0;
-      fill(0, 0, 255);
-      textSize(32);
-      text('YOU WIN!', 10, 30);
-      if (strokes == 1) {
-        text('Hole in One!', 10, 70);
-      } else {
-        text(strokes + ' strokes!', 10, 70);
-      }
+   
+      // Zera as velocidades da bola
+    xSpeed = 0;
+    ySpeed = 0;
+    fill(255); 
+    textSize(32);
+    text('Ganhaste!', width / 2  - 80, height / 2 - 200);
+   
+    radioNivel.style('display', 'block');
+ 
+
     } else if (counter > 10 * strokeDistance) {
       // Para a bola e reseta o counter
       xSpeed = 0;
@@ -103,15 +98,25 @@ function desenharJogo() {
     // Adiciona o texto do nível selecionado
     fill(255);
     textSize(18);
-    text(nivelTexto, 350, 30);
+    text(nivelTexto, 420, 30);
   
     // Verifica se o nível atual é o 'Nivel 1' e desenha uma elipse azul
     if (nivelTexto === 'Nivel 1') {
-      fill(0, 0, 255); // Cor azul
+      fill(0, 0, 255); 
       noStroke();
       ellipse(350, 350, 180, 80);
     }
-  
+    if (tacoSelecionado) {
+      // Verifica se há um taco selecionado
+      var selectedStick = radioSticks.value();
+      if (!selectedStick) {
+        // Se não houver taco selecionado, exibe um alerta
+        fill(255); 
+        textSize(16);
+       
+        text('Por favor, selecione um taco primeiro.', width / 2 - 150, height - 50);
+      }
+    }
     if (xSpeed === 0 && ySpeed === 0) {
       // Desenha um círculo ao redor da bola para indicar a área de clique
       stroke(255, 0, 0);
@@ -121,15 +126,5 @@ function desenharJogo() {
     }
   
     // Verifica se um taco foi selecionado e se a mensagem de seleção de taco deve ser exibida
-    if (tacoSelecionado) {
-      // Verifica se há um taco selecionado
-      var selectedStick = radioSticks.value();
-      if (!selectedStick) {
-        // Se não houver taco selecionado, exibe um alerta
-        fill(255, 0, 0); // Cor vermelha
-        textSize(16);
-        textAlign(CENTER, CENTER);
-        text('Por favor, selecione um taco primeiro.', width / 2, height - 10);
-      }
-    }
+  
   }
