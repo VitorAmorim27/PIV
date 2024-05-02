@@ -34,16 +34,23 @@ function iniciarJogo() {
     button.remove();
     instrucoesButton.remove();
     menuInicialTexto.remove();
+    
     // Adicionar texto de instruções
-    textAlign(LEFT);
-    fill(255);
-    textSize(16);
-    text(instrucoes, 20, 20, width - 40, height - 40);
+    adicionarInstrucoes();
+  
     // Botão para voltar ao menu inicial
     voltarButton = createButton('Voltar ao Menu Inicial');
     voltarButton.position(width / 2 - 50, height - 70);
     voltarButton.size(200, 50);
     voltarButton.mousePressed(voltarMenuInicial);
+  }
+  
+  function adicionarInstrucoes() {
+    // Adicionar texto de instruções
+    textAlign(LEFT);
+    fill(0);
+    textSize(16);
+    text(instrucoes, 20, 20, width - 40, height - 40);
   }
   
   // Função para voltar ao menu inicial
@@ -52,9 +59,23 @@ function iniciarJogo() {
   
     // Remover todos os elementos de instruções
     voltarButton.remove();
+    
+    // Remover o texto de instruções
+    removerInstrucoes();
+    
     // Criar elementos do menu inicial novamente
     criarMenuInicial();
   }
+  
+  function removerInstrucoes() {
+    // Remover texto de instruções
+    textAlign(LEFT);
+    fill(255);
+    noStroke();
+    rect(0, 0, width, height);
+    background(bgImage);
+  }
+  
 
   function initializeGame(nivel) {
     jogoIniciado = true;
