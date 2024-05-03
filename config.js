@@ -11,7 +11,6 @@ var counter;
 var strokeDistance;
 var radioSticks;
 var radioNivel;
-var nivelTexto = 'Nivel 1';
 var jogoIniciado = false;
 var button; // Botão global
 var tacoSelecionado = false; // Controle de seleção de taco
@@ -26,7 +25,7 @@ var niveis = {
         holeY: 100,
         ballX: 100,
         ballY: 450,
-        strokeDistance: 10,
+        strokeDistance: 13,
     },
     'Nivel 2': {
         holeX: 600,

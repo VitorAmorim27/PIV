@@ -1,8 +1,9 @@
 let bgImage;
-
+let gifImage; // Variável para armazenar o GIF
 function preload() {
     
     bgImage = loadImage('images/golf.jpg');  
+    gifImage = loadImage('images/giphy.gif'); // Substitua 'path/to/your/gif.gif' pelo caminho do seu GIF
 }
 
 function setup() {

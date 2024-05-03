@@ -7,7 +7,8 @@ function draw() {
 
 
 function desenharJogo() {
-    // Define o plano de fundo como verde
+    
+  // Define o plano de fundo como verde
     background(0, 220, 0);
   
     // Desenha um retângulo ao redor do canvas
@@ -19,30 +20,63 @@ function desenharJogo() {
     // Mantém o buraco em sua posição atual
     fill(0, 0, 0);
     ellipse(holeX, holeY, 30);
-  
-    // Desenha a bola de golfe
-    stroke(0, 0, 0); 
+
+// Desenha a bola de golfe
+    stroke(255, 255, 255); 
     strokeWeight(2); 
     fill(255); 
-    ellipse(x, y, 20);
+    ellipse(x, y, 15);
+     // Chama a função para desenhar a bandeira na posição do buraco
+     desenharBandeira();
+    stroke(0, 0, 0); 
   
-    // Verifica se o nível atual é o nível 1 e se a bola colidiu com o lago
-    if (nivelTexto === 'Nivel 1' && collidePointEllipse(x, y, 350, 350, 180, 80)) {
+   
+   
+    // Verifica se o nível atual é o nível 1
+    if (nivelTexto === 'Nivel 1') {
+    
+      desenharQuadrados();
+      
+      for (var i = 0; i < quadrados.length; i++) {
+        var quad = quadrados[i];
+        
+        // Verifique a colisão entre a bola e o quadrado
+        if (collideRect(x, y, quad.x, quad.y, quad.size)) {
+          var dx = x - quad.x;
+          var dy = y - quad.y;
+          var distance = dist(x, y, quad.x + quad.size / 2, quad.y + quad.size / 2);
+          
+          // Posicione a bola para fora do quadrado
+          x = quad.x + quad.size / 2 + (dx / distance) * (quad.size / 2 );
+          y = quad.y + quad.size / 2 + (dy / distance) * (quad.size / 2 );
+          
+          // Zere as velocidades da bola
+          xSpeed = 0;
+          ySpeed = 0;
+          
+               
+          // Saia do loop após lidar com a colisão
+          break;
+        }
+      }
+      if (nivelTexto === 'Nivel 1' && collidePointEllipse(x, y, 350, 350, 180, 80)) {
   
-      var dx = x - 350; 
-      var dy = y - 350; 
-      var distance = dist(x, y, 350, 350); 
-  
-      x = 350 + (dx / distance) * (180 / 2 + 40);
-      y = 350 + (dy / distance) * (80 / 2 + 40);
-  
-      // Zere as velocidades da bola
-      xSpeed = 0;
-      ySpeed = 0;
-  
-      // Aumenta o contador de jogadas
-      strokes++;
+        var dx = x - 350; 
+        var dy = y - 350; 
+        var distance = dist(x, y, 350, 350); 
+    
+        x = 350 + (dx / distance) * (180 / 2 + 40);
+        y = 350 + (dy / distance) * (80 / 2 + 40);
+    
+        // Zere as velocidades da bola
+        xSpeed = 0;
+        ySpeed = 0;
+    
+        
+      }
     }
+   
+   
   
     // Se a bola de golfe cair no buraco
     if (abs(x - holeX) <= 5 && abs(y - holeY) <= 5) {
@@ -124,7 +158,6 @@ function desenharJogo() {
       noFill();
       ellipse(x, y, 75);
     }
-  
-    // Verifica se um taco foi selecionado e se a mensagem de seleção de taco deve ser exibida
+   
   
   }
