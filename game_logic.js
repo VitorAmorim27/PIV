@@ -66,7 +66,43 @@ function iniciarJogo() {
     // Criar elementos do menu inicial novamente
     criarMenuInicial();
   }
-  
+  function reiniciarJogo() {
+   
+    initializeGame(nivelAtual);
+}
+  function voltarAoInicio() {
+    // Remova todos os elementos do jogo atual
+    if (radioSticks) {
+        radioSticks.style('display', 'none');
+    }
+
+    if (AgainButton) {
+        AgainButton.remove();
+    }
+
+    if (SairButton) {
+        SairButton.remove();
+    }
+
+    if (LvlTexto) {
+        LvlTexto.remove();
+    }
+
+    if (radioNivel) {
+        radioNivel.remove();
+    }
+
+    background(bgImage);
+    
+    jogoIniciado = false;
+    tacoSelecionado = false;
+    exibirMensagemErro = false;
+
+    // Restabelece o menu inicial
+    criarMenuInicial();
+}
+
+
   function removerInstrucoes() {
     // Remover texto de instruções
     textAlign(LEFT);
@@ -108,6 +144,18 @@ function iniciarJogo() {
     radioSticks.option('Taco 3');
   
     radioSticks.changed(changeStick);
+
+      
+      AgainButton = createButton('Começar de novo');
+      AgainButton.position(650, 530);
+      AgainButton.size(130, 50);
+      AgainButton.mousePressed(reiniciarJogo);
+       
+      SairButton = createButton('Sair');
+      SairButton.position(AgainButton.width + 660, 530);
+      SairButton.size(80, 50);
+      SairButton.mousePressed(voltarAoInicio);
+
   }
   function changeNivel() {
     var selectedNivel = radioNivel.value();
@@ -130,7 +178,7 @@ function iniciarJogo() {
     },
     'Taco 3': {
         speedMultiplier: 1.2,
-        precision: 0.1,
+        precision: 0.6,
         distanceFactor: 1.5, // Alcance significativamente maior
     }
 };
@@ -154,31 +202,21 @@ function changeStick() {
 }
 
 
-  function mousePressed() {
-    // Verifica se o clique ocorreu na área dos botões de opção
-    var radioX = radioSticks.elt.offsetLeft;
-    var radioY = radioSticks.elt.offsetTop;
-    var radioWidth = radioSticks.elt.offsetWidth;
-    var radioHeight = radioSticks.elt.offsetHeight;
-  
-    if (mouseX >= radioX && mouseX <= radioX + radioWidth &&
-      mouseY >= radioY && mouseY <= radioY + radioHeight) {
-  
-      return;
-    }
-  
-    // Verifica se há um taco selecionado apenas se o jogo estiver iniciado
-    if (jogoIniciado) {
-      var selectedStick = radioSticks.value();
-      if (!selectedStick) {
-        // Se não houver taco selecionado, exibe um alerta
-        alert('Por favor, selecione um taco primeiro.');
-        return;
-      }
-    }
-  
-    if (collidePointEllipse(mouseX, mouseY, x, y, 75, 75)) {
+function mousePressed() {
+  // Verifica se o clique ocorreu na área dos botões de opção
+  var radioX = radioSticks.elt.offsetLeft;
+  var radioY = radioSticks.elt.offsetTop;
+  var radioWidth = radioSticks.elt.offsetWidth;
+  var radioHeight = radioSticks.elt.offsetHeight;
 
+  if (mouseX >= radioX && mouseX <= radioX + radioWidth && mouseY >= radioY && mouseY <= radioY + radioHeight) {
+      return;
+  }
+
+  
+
+  // Verifica se o clique está próximo à bola de golfe
+  if (collidePointEllipse(mouseX, mouseY, x, y, 75, 75)) {
       // Calcula a distância entre o clique e a bola
       var strokeX = abs(mouseX - x);
       var strokeY = abs(mouseY - y);
@@ -186,7 +224,7 @@ function changeStick() {
 
       // Obtém o taco selecionado
       var selectedStick = radioSticks.value();
-      
+
       // Obtém as características do taco selecionado
       var taco = tacos[selectedStick];
 
@@ -195,8 +233,7 @@ function changeStick() {
       var calculatedYSpeed = (y - mouseY) / 10 * taco.speedMultiplier;
 
       // Adiciona variação às velocidades com base na precisão do taco
-      // Uma precisão mais baixa (mais imprecisa) resulta em maior variação
-      var variationX = (Math.random() * 2 - 1) * (1 - taco.precision); // Variação entre -1 e 1 * (1 - precisão)
+      var variationX = (Math.random() * 2 - 1) * (1 - taco.precision);
       var variationY = (Math.random() * 2 - 1) * (1 - taco.precision);
 
       // Ajusta as velocidades com a variação e o fator de distância
@@ -208,5 +245,11 @@ function changeStick() {
 
       // Exibe as velocidades calculadas para depuração
       console.log("Velocidades calculadas: ", xSpeed, ySpeed);
+     
+      // Toca o som do taco selecionado
+      if (tacoSounds[selectedStick]) {
+          tacoSounds[selectedStick].play();
+      }
+      
   }
 }

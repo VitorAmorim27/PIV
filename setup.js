@@ -1,9 +1,15 @@
 let bgImage;
-let gifImage; // Variável para armazenar o GIF
+let gifImage;
+let tacoSounds = {};
+
+
 function preload() {
     
     bgImage = loadImage('images/golf.jpg');  
-    gifImage = loadImage('images/giphy.gif'); // Substitua 'path/to/your/gif.gif' pelo caminho do seu GIF
+    gifImage = loadImage('images/giphy.gif'); 
+    tacoSounds['Taco 1'] = loadSound('sounds/hit1.wav');
+    tacoSounds['Taco 2'] = loadSound('sounds/hit2.wav');
+    tacoSounds['Taco 3'] = loadSound('sounds/hit3.wav');
 }
 
 function setup() {
@@ -15,6 +21,8 @@ function setup() {
 
     // Cria elementos do menu inicial
     criarMenuInicial();
+
+  
 }
 
 function criarMenuInicial() {
