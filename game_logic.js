@@ -117,25 +117,41 @@ function iniciarJogo() {
     initializeGame(nivelAtual);
     
   }
-  var tacoVelocities = {
-    'Taco 1': 0.5,
-    'Taco 2': 0.8, 
-    'Taco 3': 1.2
-  };
+  var tacos = {
+    'Taco 1': {
+        speedMultiplier: 0.5,
+        precision: 1.0,
+        distanceFactor: 1.0, // Alcance normal
+    },
+    'Taco 2': {
+        speedMultiplier: 0.8,
+        precision: 0.9,
+        distanceFactor: 1.2, // Alcance ligeiramente maior
+    },
+    'Taco 3': {
+        speedMultiplier: 1.2,
+        precision: 0.1,
+        distanceFactor: 1.5, // Alcance significativamente maior
+    }
+};
 
-  function changeStick() {
-    var selectedStick = radioSticks.value();
+function changeStick() {
+  // Obtém o taco selecionado
+  var selectedStick = radioSticks.value();
   
-    console.log('Taco selecionado:', selectedStick);
+  // Exibe a seleção do taco para depuração
+  console.log('Taco selecionado:', selectedStick);
   
-    var speedMultiplier = tacoVelocities[selectedStick];
+  // Obtém as características do taco selecionado
+  var taco = tacos[selectedStick];
   
-    xSpeed *= speedMultiplier;
-    ySpeed *= speedMultiplier;
-  
-    // Define que um taco foi selecionado
-    tacoSelecionado = true;
-  }
+  // Atualize as velocidades de xSpeed e ySpeed com o multiplicador de velocidade do taco
+  xSpeed *= taco.speedMultiplier;
+  ySpeed *= taco.speedMultiplier;
+
+  // Define que um taco foi selecionado
+  tacoSelecionado = true;
+}
 
 
   function mousePressed() {
@@ -161,24 +177,36 @@ function iniciarJogo() {
       }
     }
   
-    // Verifica se o clique do mouse está próximo à bola de golfe
     if (collidePointEllipse(mouseX, mouseY, x, y, 75, 75)) {
-  
+
       // Calcula a distância entre o clique e a bola
       var strokeX = abs(mouseX - x);
       var strokeY = abs(mouseY - y);
       strokeDistance = sqrt(strokeX * strokeY);
-  
+
+      // Obtém o taco selecionado
+      var selectedStick = radioSticks.value();
+      
+      // Obtém as características do taco selecionado
+      var taco = tacos[selectedStick];
+
       // Calcula o fator de velocidade com base no taco selecionado
-      var speedMultiplier = tacoVelocities[selectedStick];
-  
-      // Define as velocidades, considerando o fator de velocidade
-      xSpeed = (x - mouseX) / 10 * speedMultiplier;
-      ySpeed = (y - mouseY) / 10 * speedMultiplier;
+      var calculatedXSpeed = (x - mouseX) / 10 * taco.speedMultiplier;
+      var calculatedYSpeed = (y - mouseY) / 10 * taco.speedMultiplier;
+
+      // Adiciona variação às velocidades com base na precisão do taco
+      // Uma precisão mais baixa (mais imprecisa) resulta em maior variação
+      var variationX = (Math.random() * 2 - 1) * (1 - taco.precision); // Variação entre -1 e 1 * (1 - precisão)
+      var variationY = (Math.random() * 2 - 1) * (1 - taco.precision);
+
+      // Ajusta as velocidades com a variação e o fator de distância
+      xSpeed = (calculatedXSpeed + calculatedXSpeed * variationX) * taco.distanceFactor;
+      ySpeed = (calculatedYSpeed + calculatedYSpeed * variationY) * taco.distanceFactor;
+
+      // Incrementa o contador de tacadas
       strokes++;
-  
+
       // Exibe as velocidades calculadas para depuração
-      console.log(xSpeed);
-      console.log(ySpeed);
-    }
+      console.log("Velocidades calculadas: ", xSpeed, ySpeed);
   }
+}

@@ -1,4 +1,3 @@
-// Configurações iniciais e variáveis globais
 var holeX;
 var holeY;
 var x;
@@ -12,12 +11,12 @@ var strokeDistance;
 var radioSticks;
 var radioNivel;
 var jogoIniciado = false;
-var button; // Botão global
-var tacoSelecionado = false; // Controle de seleção de taco
-var instrucoesButton; // Botão de instruções
-var voltarButton; // Botão de voltar ao menu inicial
-var menuInicialTexto; // Texto do menu inicial
-var LvlTexto; // Texto para seleção de nível
+var button; 
+var tacoSelecionado = false; 
+var instrucoesButton; 
+var voltarButton; 
+var menuInicialTexto; 
+var LvlTexto; 
 
 var niveis = {
     'Nivel 1': {
@@ -28,17 +27,17 @@ var niveis = {
         strokeDistance: 13,
     },
     'Nivel 2': {
-        holeX: 600,
-        holeY: 200,
-        ballX: 200,
-        ballY: 400,
+        holeX: 200,
+        holeY: 130,
+        ballX: 800,
+        ballY: 500,
         strokeDistance: 10,
     },
     'Nivel 3': {
-        holeX: 500,
-        holeY: 300,
-        ballX: 300,
-        ballY: 350,
+        holeX: 450,
+        holeY: 150,
+        ballX: 450,
+        ballY: 500,
         strokeDistance: 10,
     }
 };
